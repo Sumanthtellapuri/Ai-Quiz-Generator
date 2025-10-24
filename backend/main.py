@@ -4,6 +4,9 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 import json
 from datetime import datetime
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from database import init_db, get_db, Quiz
 from scraper import scrape_wikipedia
