@@ -1,0 +1,118 @@
+/* Styles for the Quiz Generation Tab/View */
+
+.generate-quiz-bg {
+  /* background: linear-gradient(120deg, #232526 0%, #414345 100%); <-- REMOVED: Use parent .app-bg instead */
+  /* min-height: 100vh; and width: 100vw; are also redundant if used inside .app-bg */
+  width: 100%; /* Use 100% width of the parent container */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.generate-quiz-card,
+.generate-quiz-form {
+  /* Dark card background with slight transparency */
+  background: rgba(44, 62, 80, 0.95);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 700px;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  text-align: center;
+  transition: box-shadow 0.3s, width 0.3s;
+  position: relative;
+  z-index: 2;
+}
+
+.generate-quiz-card:hover {
+  /* Teal-tinted shadow on hover */
+  box-shadow: 0 12px 40px 0 #26a69a44;
+}
+
+.generate-quiz-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #26a69a; /* Teal primary color */
+  margin-bottom: 1rem;
+}
+
+.generate-quiz-label {
+  color: #26a69a;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: block;
+  text-align: left;
+}
+
+.generate-quiz-input {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #37474f;
+  border-radius: 0.7rem;
+  background: #263238; /* Very dark input background */
+  color: #ececec;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+  /* Ensure input text fits gracefully */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.generate-quiz-btn {
+  padding: 1rem 2.5rem;
+  font-weight: 700;
+  color: #fff;
+  background: #26a69a;
+  border: none;
+  border-radius: 0.7rem;
+  box-shadow: 0 2px 8px #26a69a44;
+  cursor: pointer;
+  transition: all 0.2s;
+  max-width: 100%;
+}
+
+.generate-quiz-btn:hover {
+  background: #2bbbad;
+  box-shadow: 0 4px 16px #26a69a44;
+}
+
+.generate-quiz-btn:disabled {
+  background: #26a69a88;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.generate-quiz-error {
+  color: #f44336; /* Red for error messages */
+  background: #263238;
+  border: 1px solid #f44336;
+  border-radius: 1rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  text-align: center;
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 768px) {
+  .generate-quiz-card,
+  .generate-quiz-form {
+    padding: 1rem;
+    max-width: 95vw;
+    margin: 1rem auto;
+  }
+  .generate-quiz-title {
+    font-size: 1.8rem;
+  }
+}

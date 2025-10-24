@@ -6,43 +6,55 @@ function App() {
   const [activeTab, setActiveTab] = useState('generate');
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
-      <div className="container mx-auto px-4 py-8">
-        <header className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-2">
+    <div className="app-bg">
+      <div className="app-container">
+        <header style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <h1 style={{ fontSize: '2.5rem', fontWeight: 800, color: '#26a69a', marginBottom: '0.5rem', letterSpacing: '1px' }}>
             AI Wiki Quiz Generator
           </h1>
-          <p className="text-gray-600 text-lg">
+          <p style={{ color: '#ececec', fontSize: '1.15rem' }}>
             Transform Wikipedia articles into engaging educational quizzes
           </p>
         </header>
 
-        <div className="mb-6">
-          <div className="flex border-b border-gray-300">
+        <div style={{ marginBottom: '2rem', width: '100%' }}>
+          <div style={{ display: 'flex', borderBottom: '1px solid #37474f', justifyContent: 'center' }}>
             <button
               onClick={() => setActiveTab('generate')}
-              className={`px-6 py-3 font-semibold transition-colors ${
-                activeTab === 'generate'
-                  ? 'text-blue-600 border-b-2 border-blue-600'
-                  : 'text-gray-600 hover:text-gray-800'
-              }`}
+              style={{
+                padding: '0.75rem 2rem',
+                fontWeight: 600,
+                color: activeTab === 'generate' ? '#26a69a' : '#b2dfdb',
+                borderBottom: activeTab === 'generate' ? '3px solid #26a69a' : 'none',
+                background: 'none',
+                outline: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'color 0.2s',
+              }}
             >
               Generate Quiz
             </button>
             <button
               onClick={() => setActiveTab('history')}
-              className={`px-6 py-3 font-semibold transition-colors ${
-                activeTab === 'history'
-                  ? 'text-blue-600 border-b-2 border-blue-600'
-                  : 'text-gray-600 hover:text-gray-800'
-              }`}
+              style={{
+                padding: '0.75rem 2rem',
+                fontWeight: 600,
+                color: activeTab === 'history' ? '#26a69a' : '#b2dfdb',
+                borderBottom: activeTab === 'history' ? '3px solid #26a69a' : 'none',
+                background: 'none',
+                outline: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'color 0.2s',
+              }}
             >
               Quiz History
             </button>
           </div>
         </div>
 
-        <main>
+        <main style={{ width: '100%' }}>
           {activeTab === 'generate' ? <GenerateQuizTab /> : <HistoryTab />}
         </main>
       </div>

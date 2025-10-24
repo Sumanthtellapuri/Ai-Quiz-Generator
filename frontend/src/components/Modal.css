@@ -1,0 +1,103 @@
+/* === Modal.css - Theme matched to dark gray/teal === */
+
+/* Overlay background with smooth fade-in */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.9);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Modal container with smooth scale-up effect */
+.modal-container {
+  /* Updated gradient to match app background for consistency */
+  background: linear-gradient(180deg, #263238 0%, #37474f 100%); 
+  /* Updated border to match app theme */
+  border: 1px solid #455a64; 
+  border-radius: 1rem;
+  /* Updated box shadow to use app's primary teal color */
+  box-shadow: 0 0 25px rgba(38, 166, 154, 0.15); 
+  max-width: 900px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: scale(0.95);
+  animation: scaleUp 0.25s ease-out forwards;
+}
+
+/* Modal header with subtle border and glow */
+.modal-header {
+  position: sticky;
+  top: 0;
+  /* Updated header background color */
+  background: #37474f; 
+  /* Updated border color */
+  border-bottom: 1px solid #455a64; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Title */
+.modal-title {
+  color: #f1f5f9;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* Close button */
+.modal-close {
+  color: #b2dfdb; /* Light teal/gray for visibility */
+  font-size: 1.8rem;
+  font-weight: bold;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.modal-close:hover {
+  color: #26a69a; /* App's primary teal color on hover */
+  transform: rotate(90deg);
+}
+
+/* Modal content */
+.modal-body {
+  color: #e0e0e0; /* Light text color */
+  padding: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Scrollbar Styling */
+.modal-container::-webkit-scrollbar {
+  width: 8px;
+}
+.modal-container::-webkit-scrollbar-thumb {
+  /* Updated scrollbar thumb color */
+  background-color: #455a64; 
+  border-radius: 10px;
+}
+.modal-container::-webkit-scrollbar-thumb:hover {
+  background-color: #546e7a;
+}
+
+/* === Animations === */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from { transform: scale(0.95); opacity: 0.9; }
+  to { transform: scale(1); opacity: 1; }
+}

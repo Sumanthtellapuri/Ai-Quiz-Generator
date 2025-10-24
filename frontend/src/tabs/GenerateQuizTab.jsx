@@ -1,89 +1,115 @@
 import React, { useState } from 'react';
-import { generateQuiz } from '../services/api';
+// Real API call to backend
+const api = {
+    generateQuiz: async (url) => {
+        const response = await fetch("/api/generate_quiz", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ url })
+        });
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.detail || "Quiz generation failed");
+        }
+        return await response.json();
+    }
+};
 import QuizDisplay from '../components/QuizDisplay';
+import './GenerateQuizTab.css';
 
 const GenerateQuizTab = () => {
-  const [url, setUrl] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [quizData, setQuizData] = useState(null);
-  const [error, setError] = useState(null);
+    const [url, setUrl] = useState('');
+    const [quizResult, setQuizResult] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!url.trim()) {
-      setError('Please enter a Wikipedia URL');
-      return;
-    }
+    const isValidUrl = (input) => {
+        try {
+            const urlObj = new URL(input);
+            return urlObj.hostname.includes('wikipedia.org'); 
+        } catch (e) {
+            return false;
+        }
+    };
 
-    if (!url.includes('wikipedia.org')) {
-      setError('Please enter a valid Wikipedia URL');
-      return;
-    }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError(null);
+        setQuizResult(null);
 
-    setLoading(true);
-    setError(null);
-    setQuizData(null);
+        if (!isValidUrl(url)) {
+            setError("Please enter a valid Wikipedia URL (must contain 'wikipedia.org').");
+            return;
+        }
 
-    try {
-      const response = await generateQuiz(url);
-      setQuizData(response.quiz_data);
-    } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to generate quiz. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
+        setIsLoading(true);
+        try {
+            // Real API call
+            const data = await api.generateQuiz(url);
+            setQuizResult({
+                id: data.id || data.quiz_id,
+                url: url,
+                title: data.quiz_data?.title || data.quiz_data?.quiz_title || data.title || "Generated Quiz",
+                date_generated: data.date_generated || new Date().toISOString(),
+                quiz_data: data.quiz_data || data.quizData || data
+            });
+            setUrl("");
+        } catch (err) {
+            setError(err.message || "An unknown error occurred during quiz generation. Check the URL and server status.");
+            console.error(err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-  return (
-    <div className="max-w-6xl mx-auto">
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Generate a New Quiz</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-2">
-              Wikipedia URL
-            </label>
-            <input
-              type="url"
-              id="url"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://en.wikipedia.org/wiki/..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold py-3 px-6 rounded-md hover:from-blue-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-          >
-            {loading ? 'Generating Quiz...' : 'Generate Quiz'}
-          </button>
-        </form>
-
-        {error && (
-          <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
-            {error}
-          </div>
-        )}
-      </div>
-
-      {loading && (
-        <div className="flex justify-center items-center py-12">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-500 mx-auto mb-4"></div>
-            <p className="text-gray-600 text-lg">Analyzing article and generating quiz...</p>
-            <p className="text-gray-500 text-sm mt-2">This may take 10-30 seconds</p>
-          </div>
+    return (
+        <div className="generate-quiz-bg">
+            <div className="generate-quiz-card">
+                <h2 className="generate-quiz-title">Generate New Quiz</h2>
+                <form onSubmit={handleSubmit} className="generate-quiz-form">
+                    <label htmlFor="wiki-url" className="generate-quiz-label">
+                        Wikipedia Article URL
+                    </label>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        <input
+                            id="wiki-url"
+                            type="url"
+                            value={url}
+                            onChange={(e) => setUrl(e.target.value)}
+                            placeholder="e.g., https://en.wikipedia.org/wiki/Artificial_intelligence"
+                            required
+                            className="generate-quiz-input"
+                            disabled={isLoading}
+                        />
+                        <button
+                            type="submit"
+                            disabled={isLoading}
+                            className="generate-quiz-btn"
+                        >
+                            {isLoading ? (
+                                <span>Generating...</span>
+                            ) : 'Generate Quiz'}
+                        </button>
+                    </div>
+                </form>
+                {error && (
+                    <div className="generate-quiz-error" role="alert">
+                        <span style={{ fontWeight: 'bold', marginRight: '8px' }}>⚠️ Error:</span> {error}
+                    </div>
+                )}
+                {quizResult && (
+                    <div style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid #37474f' }}>
+                        <h3 className="generate-quiz-title" style={{ fontSize: '1.5rem', color: '#26a69a', marginBottom: '1.5rem' }}>Generated Quiz Preview</h3>
+                        <QuizDisplay 
+                            quizData={quizResult.quiz_data} 
+                            title={quizResult.title} 
+                            url={quizResult.url}
+                        />
+                    </div>
+                )}
+            </div>
         </div>
-      )}
-
-      {quizData && !loading && (
-        <QuizDisplay quizData={quizData} />
-      )}
-    </div>
-  );
+    );
 };
 
 export default GenerateQuizTab;
