@@ -1,10 +1,12 @@
+# backend/llm_quiz_generator.py
 import os
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
-from models import QuizOutput
+from models import QuizOutput # <-- Using the updated model
 
 def get_gemini_api_key():
+    # ... (code is correct) ...
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         raise ValueError("GEMINI_API_KEY environment variable is not set")
@@ -15,9 +17,9 @@ def generate_quiz(article_title: str, article_content: str):
         api_key = get_gemini_api_key()
         
         llm = ChatGoogleGenerativeAI(
-            model="gemini-2.0-flash-exp",
+            model="gemini-2.5-pro", # Set to Pro for better structured compliance
             google_api_key=api_key,
-            temperature=0.7
+            temperature=0.3 # Reduced for consistency
         )
         
         parser = JsonOutputParser(pydantic_object=QuizOutput)
@@ -34,16 +36,16 @@ Your task is to create a comprehensive quiz with the following structure:
 
 1. A brief summary of the article (2-3 sentences)
 2. Generate 7-10 multiple-choice questions that:
-   - Cover different aspects of the article
-   - Range from basic recall to deeper understanding
-   - Have 4 options each with only ONE correct answer
-   - Include clear explanations for the correct answers
+    - Cover different aspects of the article
+    - Have 4 options each with only ONE correct answer
+    - Include clear explanations for the correct answers
+    - Identify the specific topic_area of the question (e.g., 'Architecture', 'Training Method', 'Ethics')
 3. Identify 3-5 key entities or concepts from the article
 4. Suggest 3-5 related topics for further reading
 
 {format_instructions}
 
-Ensure the quiz is educational, engaging, and accurately reflects the article content.""",
+Ensure the quiz is educational, engaging, and accurately reflects the article content. ONLY OUTPUT JSON.""",
             input_variables=["title", "content"],
             partial_variables={"format_instructions": parser.get_format_instructions()}
         )

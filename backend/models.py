@@ -1,3 +1,4 @@
+# backend/models.py
 from pydantic import BaseModel, Field
 from typing import List
 
@@ -6,6 +7,7 @@ class Question(BaseModel):
     options: List[str] = Field(description="List of 4 multiple choice options")
     correct_answer: str = Field(description="The correct answer from the options")
     explanation: str = Field(description="Brief explanation of why the answer is correct")
+    topic_area: str = Field(description="The specific topic covered by the question.") # Added field
 
 class QuizOutput(BaseModel):
     title: str = Field(description="Title of the Wikipedia article")
